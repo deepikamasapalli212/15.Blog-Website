@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My Blog Website</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#f4f4f4;
+color:#333;
+}
+
+/* Header */
+header{
+background:#111;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+/* Hero */
+.hero{
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+padding:60px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-size:36px;
+margin-bottom:10px;
+}
+
+/* Container */
+.container{
+max-width:900px;
+margin:30px auto;
+padding:0 20px;
+}
+
+/* Blog Form */
+.blog-form{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:30px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.blog-form input,
+.blog-form textarea{
+width:100%;
+padding:10px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.blog-form button{
+padding:10px 15px;
+border:none;
+border-radius:6px;
+background:#667eea;
+color:white;
+cursor:pointer;
+}
+
+/* Blog Posts */
+.post{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+position:relative;
+}
+
+.post h2{
+margin-bottom:10px;
+}
+
+.post small{
+color:#777;
+}
+
+.delete-btn{
+position:absolute;
+top:15px;
+right:15px;
+background:red;
+color:white;
+border:none;
+padding:5px 10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+footer{
+background:#111;
+color:white;
+text-align:center;
+padding:15px;
+margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>My Personal Blog</h2>
+</header>
+
+<div class="hero">
+<h1>Welcome to My Blog</h1>
+<p>Write and share your thoughts ✨</p>
+</div>
+
+<div class="container">
+
+<div class="blog-form">
+<h3>Create New Post</h3>
+<input type="text" id="title" placeholder="Post Title">
+<textarea id="content" rows="5" placeholder="Write your content..."></textarea>
+<button onclick="addPost()">Publish</button>
+</div>
+
+<div id="posts"></div>
+
+</div>
+
+<footer>
+© 2026 My Blog Website
+</footer>
+
+<script>
+const postsContainer = document.getElementById("posts");
+
+/* Load saved posts */
+window.onload = function(){
+postsContainer.innerHTML = localStorage.getItem("blogPosts") || "";
+attachDeleteEvents();
+};
+
+function savePosts(){
+localStorage.setItem("blogPosts", postsContainer.innerHTML);
+}
+
+function addPost(){
+const title = document.getElementById("title").value.trim();
+const content = document.getElementById("content").value.trim();
+
+if(title==="" || content===""){
+alert("Please fill all fields");
+return;
+}
+
+const date = new Date().toLocaleString();
+
+const post = document.createElement("div");
+post.className="post";
+
+post.innerHTML = `
+<button class="delete-btn">Delete</button>
+<h2>${title}</h2>
+<small>${date}</small>
+<p>${content}</p>
+`;
+
+postsContainer.prepend(post);
+
+document.getElementById("title").value="";
+document.getElementById("content").value="";
+
+attachDeleteEvents();
+savePosts();
+}
+
+function attachDeleteEvents(){
+document.querySelectorAll(".delete-btn").forEach(btn=>{
+btn.onclick=function(){
+btn.parentElement.remove();
+savePosts();
+};
+});
+}
+</script>
+
+</body>
+</html>
